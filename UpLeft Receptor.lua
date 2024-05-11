@@ -32,6 +32,7 @@ return Def.ActorFrame {
 		Frames= {
 			{ Frame = 1 }
 		};
+		InitCommand=cmd(blend,'BlendMode_Add');
 	};
 	NOTESKIN:LoadActor(Var "Button", "Ready Receptor")..{
 		Name="Outline";
