@@ -2,9 +2,9 @@
 
 ![DownLeft Hold BottomCap](<DownLeft Hold BottomCap Active 6x1.png>)
 
-![Center Tap Note](<Center Tap Note (res 192x128) 3x2.png>)
+![Center Tap Note](<Center Tap Note 3x2.png>)
 
-![Center Hold BottomCap](<Center Hold BottomCap Active (res 384x64) 6x1.png>)
+![Center Hold BottomCap](<Center Hold BottomCap Active 6x1.png>)
 
 ![UpLeft Tap Note](<UpLeft Tap Note 3x2.png>)
 
