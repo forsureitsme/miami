@@ -1,40 +1,39 @@
 local flash = Def.ActorFrame {}
 
 local spriteSize = 64;
+local quarterSprite = spriteSize/4;
+local halfSprite = spriteSize/2;
 local corners = {
 	{
-		["addx"] = spriteSize/4,
-		["addy"] = spriteSize/4,
-		["rotationz"] = 0,
+		["addx"] = quarterSprite,
+		["addy"] = quarterSprite,
 	},
 	{
-		["addx"] = -spriteSize/4,
-		["addy"] = spriteSize/4,
-		["rotationz"] = 90,
+		["addx"] = -quarterSprite,
+		["addy"] = quarterSprite,
 	},
 	{
-		["addx"] = -spriteSize/4,
-		["addy"] = -spriteSize/4,
-		["rotationz"] = 180,
+		["addx"] = -quarterSprite,
+		["addy"] = -quarterSprite,
 	},
 	{
-		["addx"] = spriteSize/4,
-		["addy"] = -spriteSize/4,
-		["rotationz"] = 270,
+		["addx"] = quarterSprite,
+		["addy"] = -quarterSprite,
 	}
 }
 
-for _, corner in ipairs(corners) do
+for i, corner in ipairs(corners) do
 	flash[#flash + 1] = Def.Quad {
 		InitCommand=function(self)
 			self:blend("BlendMode_Add");
 			self:diffusecolor(color("255,255,255,1"));
-			self:zoomto(spriteSize/2,spriteSize/2);
+			self:zoomto(halfSprite,halfSprite);
 			self:diffuseupperright(color("0,0,0,1"));
 			self:diffuselowerright(color("0,0,0,1"));
 			self:diffuselowerleft(color("0,0,0,1"));
+			self:diffusealpha(.5);
 
-			self:rotationz(corner["rotationz"]);
+			self:rotationz((i-1) * 90);
 			self:addx(corner["addx"]);
 			self:addy(corner["addy"]);
 		end;
@@ -45,7 +44,7 @@ end
 flash = Def.ActorFrame {
 	flash..{};
 	flash..{
-		InitCommand=cmd(rotationz,45);
+		InitCommand=cmd(rotationz,math.random(0,360);zoom,.85);
 	};
 };
 
@@ -62,7 +61,7 @@ return Def.ActorFrame {
 		W5Command=cmd();
 		
 		HitMineCommand=cmd(playcommand,"Glow");
-		GlowCommand=cmd(finishtweening;zoom,1;diffusealpha,1;accelerate,0.4;diffusealpha,0;zoom,1.2);
+		GlowCommand=cmd(finishtweening;zoom,1;diffusealpha,1;linear,.2;diffusealpha,0;zoom,1.1);
 		HeldCommand=cmd(playcommand,"Glow");
 	};	
 
@@ -80,13 +79,10 @@ return Def.ActorFrame {
 		HeldCommand=cmd(playcommand,"Glow");
 		GlowCommand=cmd(
 			finishtweening;
-			rotationz,math.random(0,360);
-			zoom,1.25;
-			diffusealpha,1;
-			decelerate,.3;
 			zoom,1;
-			diffusealpha,.5;
+			diffusealpha,1;
 			linear,.2;
+			zoom,.75;
 			diffusealpha,0;
 		);
 	};
