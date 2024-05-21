@@ -1,89 +1,62 @@
 local flash = Def.ActorFrame {}
 
-local spriteSize = 64;
-local quarterSprite = spriteSize/4;
-local halfSprite = spriteSize/2;
-local corners = {
-	{
-		["addx"] = quarterSprite,
-		["addy"] = quarterSprite,
-	},
-	{
-		["addx"] = -quarterSprite,
-		["addy"] = quarterSprite,
-	},
-	{
-		["addx"] = -quarterSprite,
-		["addy"] = -quarterSprite,
-	},
-	{
-		["addx"] = quarterSprite,
-		["addy"] = -quarterSprite,
-	}
+local spriteSize = 64
+local quarterSprite = spriteSize / 4
+local halfSprite = spriteSize / 2
+local quadrants = {
+	{ ["x"] = 1,  ["y"] = 1 },
+	{ ["x"] = -1, ["y"] = 1 },
+	{ ["x"] = -1, ["y"] = -1 },
+	{ ["x"] = 1,  ["y"] = -1 }
 }
-
-for i, corner in ipairs(corners) do
+for i, quadrant in ipairs(quadrants) do
 	flash[#flash + 1] = Def.Quad {
-		InitCommand=function(self)
-			self:blend("BlendMode_Add");
-			self:diffusecolor(color("255,255,255,1"));
-			self:zoomto(halfSprite,halfSprite);
-			self:diffuseupperright(color("0,0,0,1"));
-			self:diffuselowerright(color("0,0,0,1"));
-			self:diffuselowerleft(color("0,0,0,1"));
-			self:diffusealpha(.5);
-
-			self:rotationz((i-1) * 90);
-			self:addx(corner["addx"]);
-			self:addy(corner["addy"]);
-		end;
-	};
-	
+		InitCommand = function(self)
+			self:blend("BlendMode_Add")
+					:diffusecolor(color("255,255,255,1"))
+					:zoomto(halfSprite, halfSprite)
+					:diffuseupperright(color("0,0,0,1"))
+					:diffuselowerright(color("0,0,0,1"))
+					:diffuselowerleft(color("0,0,0,1"))
+					:rotationz((i - 1) * 90)
+					:addx(quadrant["x"] * quarterSprite)
+					:addy(quadrant["y"] * quarterSprite)
+		end
+	}
 end
 
-flash = Def.ActorFrame {
-	flash..{};
-	flash..{
-		InitCommand=cmd(rotationz,math.random(0,360);zoom,.85);
-	};
-};
+local function glow(self)
+	return self:finishtweening()
+			:zoom(1)
+			:diffusealpha(1)
+			:linear(.2)
+			:diffusealpha(0)
+			:zoom(1.2)
+end
 
 return Def.ActorFrame {
 	NOTESKIN:LoadActor(Var "Button", "Ready Receptor") .. {
-		Frames= {
-			{ Frame = 0 }
-		};
-		InitCommand=cmd(blend,"BlendMode_Add";playcommand,"Glow");
-		W1Command=cmd(playcommand,"Glow");
-		W2Command=cmd(playcommand,"Glow");
-		W3Command=cmd(playcommand,"Glow");
-		W4Command=cmd();
-		W5Command=cmd();
-		
-		HitMineCommand=cmd(playcommand,"Glow");
-		GlowCommand=cmd(finishtweening;zoom,1;diffusealpha,1;linear,.2;diffusealpha,0;zoom,1.1);
-		HeldCommand=cmd(playcommand,"Glow");
-	};	
+		Frames = { { Frame = 0 } },
+		InitCommand = function(self)
+			self:blend("BlendMode_Add");
+			glow(self)
+		end,
 
-	flash..{
-		InitCommand=cmd(
-			playcommand,"Glow";
-		);
-		W1Command=cmd(playcommand,"Glow");
-		W2Command=cmd(playcommand,"Glow");
-		W3Command=cmd(playcommand,"Glow");
-		W4Command=cmd();
-		W5Command=cmd();
+		W1Command = glow,
+		W2Command = glow,
+		W3Command = glow,
 
-		HitMineCommand=cmd(playcommand,"Glow");
-		HeldCommand=cmd(playcommand,"Glow");
-		GlowCommand=cmd(
-			finishtweening;
-			zoom,1;
-			diffusealpha,1;
-			linear,.2;
-			zoom,.75;
-			diffusealpha,0;
-		);
-	};
+		HitMineCommand = glow,
+		HeldCommand = glow,
+	},
+	flash .. {
+		InitCommand = glow,
+
+		W1Command = glow,
+		W2Command = glow,
+		W3Command = glow,
+
+		HitMineCommand = glow,
+		HeldCommand = glow
+	}
 }
